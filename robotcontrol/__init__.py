@@ -98,7 +98,6 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
                             self._logger.error("%s", e)
 
                         #time.sleep(1)
-			return ";message registered"
 				
             			
 	@octoprint.plugin.BlueprintPlugin.route("/servo1", methods=["GET"])
