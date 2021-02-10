@@ -37,7 +37,7 @@ $(function() {
                             });
                             row.find(".texto").mouseup(function() {
                                     var arm= parseInt(this.value);
-                                    self.add_gcode($(this).data("number"),arm);                              
+                                    self.add_gcode($(this).data("number"),arm*6);                              
                             });
                             
                            
