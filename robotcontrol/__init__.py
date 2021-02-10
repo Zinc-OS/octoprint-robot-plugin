@@ -72,32 +72,33 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			#	return flask.make_response("error", 200)
 				
 	def gcode_set_angle(self,comm,line, *args, **kwargs):
-        	if line.startswith("servo") :
-                    self.time=time.time()
-                    addr = int(self._settings.get(["addr"]))
-                    angle = int(line.split(":")[1])
-                    servo = int(line.split("o")[1].split(":")[0])
-                    #angle is an integer from 0 to 180
-                    if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
+		if line.startswith("servo") :
+			self._logger.info("gcode recieved")
+			self.time=time.time()
+			addr = int(self._settings.get(["addr"]))
+			angle = int(line.split(":")[1])
+			servo = int(line.split("o")[1].split(":")[0])
+			#angle is an integer from 0 to 180
+			if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
 
-                        realAngle=angle/6
-                        if servo == 1:
-                            n=int(realAngle)
-                        elif servo == 2:
-                            n=int(realAngle)+32
-                        elif servo == 3:
-                            n=int(realAngle)+64
-                        elif servo == 4:
-                            n=int(realAngle)+96
-                        else:
-                            n=None
-                        try:
-                            smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
-                        except:
-                            e = sys.exc_info()[0]
-                            self._logger.error("%s", e)
+			realAngle=angle/6
+			if servo == 1:
+				n=int(realAngle)
+			elif servo == 2:
+				n=int(realAngle)+32
+			elif servo == 3:
+				n=int(realAngle)+64
+			elif servo == 4:
+				n=int(realAngle)+96
+			else:
+				self._logger.error("%s", "SERVO DOES NOT EXIST)
+			try:
+				smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
+			except:
+				e = sys.exc_info()[0]
+				self._logger.error("%s", e)
 
-                        #time.sleep(1)
+			#time.sleep(1)
 				
             			
 	@octoprint.plugin.BlueprintPlugin.route("/servo1", methods=["GET"])
