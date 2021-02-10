@@ -92,7 +92,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 				elif servo == 4:
 					n=int(realAngle)+96
 				else:
-					#self._logger.error("%s", "SERVO DOES NOT EXIST")
+					self._logger.error("%s", "SERVO DOES NOT EXIST")
 				try:
 					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
 					#self._logger.info("gcode moved the robot")
