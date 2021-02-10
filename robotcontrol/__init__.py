@@ -72,7 +72,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			#	return flask.make_response("error", 200)
 				
 	def gcode_set_angle(self,comm,line, *args, **kwargs):
-        	if line.startswith("@servo") :
+        	if line.startswith("servo") :
                     self.time=time.time()
                     addr = int(self._settings.get(["addr"]))
                     angle = int(line.split(":")[1])
