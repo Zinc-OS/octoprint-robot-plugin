@@ -79,13 +79,13 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			servo = int(gcode.split("o")[1].split(":")[0])
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
-				
+
 				realAngle=angle/6
 				if servo = 1:
 					n=int(realAngle)
 				elif servo = 2:
 					n=int(realAngle)+32
-			      	elif servo = 3:
+				elif servo = 3:
 					n=int(realAngle)+64
 				elif servo = 4:
 					n=int(realAngle)+96
@@ -96,7 +96,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 				except:
 					e = sys.exc_info()[0]
 					self._logger.error("%s", e)
-					
+
 				#time.sleep(1)
 				
             			
