@@ -35,10 +35,21 @@ $(function() {
                                     var arm= parseInt(this.value);
                                     self.servo($(this).data("number"),arm);                              
                             });
+                            row.find(".texto").mouseup(function() {
+                                    var arm= parseInt(this.value);
+                                    self.add_gcode($(this).data("number"),arm);                              
+                            });
+                            
                            
                              $('#boxes').append(row);
                         }
                 }
+                
+        self.add_gcode = function(servo, angle) {		
+            var row = $('<div>servo'+servo+':'+angle+'</div>');
+            $('#gcode-gen').append(row);
+                        
+        }
                 
         self.servo=function(servo,angle){
             //if (self.getTime()-self.time>200){
