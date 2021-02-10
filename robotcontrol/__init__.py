@@ -71,7 +71,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			#	self._logger.error("%s", e)
 			#	return flask.make_response("error", 200)
 				
-	def gcode_set_angle1(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
+	def gcode_set_angle(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
         	if gcode and "@servo" in gcode :
                     self.time=time.time()
                     addr = int(self._settings.get(["addr"]))
@@ -98,6 +98,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
                             self._logger.error("%s", e)
 
                         #time.sleep(1)
+			return ";message registered"
 				
             			
 	@octoprint.plugin.BlueprintPlugin.route("/servo1", methods=["GET"])
