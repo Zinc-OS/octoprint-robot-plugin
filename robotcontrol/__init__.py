@@ -71,8 +71,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			#	self._logger.error("%s", e)
 			#	return flask.make_response("error", 200)
 				
-	def gcode_set_angle(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
-        	if gcode and "@servo" in gcode :
+	def gcode_set_angle(self,comm,line, *args, **kwargs):
+        	if line.startswith("@servo") :
                     self.time=time.time()
                     addr = int(self._settings.get(["addr"]))
                     angle = int(gcode.split(":")[1])
@@ -262,5 +262,6 @@ def __plugin_load__():
 
 	global __plugin_hooks__
 	__plugin_hooks__ = {
-		"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
+		"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
+		"octoprint.comm.protocol.gcode.recieved": __plugin_implementation__.gcode_set_angle
 	}
