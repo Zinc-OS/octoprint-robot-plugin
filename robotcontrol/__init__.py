@@ -101,6 +101,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 					self._logger.error("%s", e)
 
 			#time.sleep(1)
+			return 
+		return line#Destroyed my printer's connection(The function needs to return something, otherwise the printer doesn't recieve any gcodes), and I was scared...
 				
             			
 	@octoprint.plugin.BlueprintPlugin.route("/servo1", methods=["GET"])
