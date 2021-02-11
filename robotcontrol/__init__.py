@@ -99,9 +99,9 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 				except:
 					e = sys.exc_info()[0]
 					self._logger.error("%s", e)
-
+			return None
 			#time.sleep(1)
-			return 
+			
 		return line#Destroyed my printer's connection(The function needs to return something, otherwise the printer doesn't recieve any gcodes), and I was scared...
 				
             			
