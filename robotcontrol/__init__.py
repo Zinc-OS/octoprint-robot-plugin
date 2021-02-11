@@ -73,7 +73,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 				
 	def gcode_set_angle(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
 		self._logger.info("gcode detected")
-		if gcode.startswith('servo'):
+		if gcode and gcode.startswith('servo'):
 			self._logger.info("gcode recieved")
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
