@@ -83,14 +83,13 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
 				self._logger.info("gcode should move the robot")
 				realAngle=angle/6
-				if servo == 1:
-					n=int(realAngle)
-				elif servo == 2:
-					n=int(realAngle)+32
+				n=int(realAngle)
+				if servo == 2:
+					n+=32
 				elif servo == 3:
-					n=int(realAngle)+64
+					n+=64
 				elif servo == 4:
-					n=int(realAngle)+96
+					n+=96
 				else:
 					self._logger.error("%s", "SERVO DOES NOT EXIST")
 				try:
