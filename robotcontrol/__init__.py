@@ -99,7 +99,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 					e = sys.exc_info()[0]
 					self._logger.error("%s", e)
 				
-			#return None
+			return None
 			#time.sleep(1)
 			
 		return cmd
@@ -267,5 +267,5 @@ def __plugin_load__():
 	global __plugin_hooks__
 	__plugin_hooks__ = {
 		"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
-		"octoprint.comm.protocol.gcode.sent": __plugin_implementation__.gcode_set_angle
+		"octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.gcode_set_angle
 	}
