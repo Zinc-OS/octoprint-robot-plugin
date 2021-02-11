@@ -12,7 +12,7 @@ Install manually using this URL:
 
 ## Configuration
 
-For a four servo robot.
+For a four servo robot. via the I2C bus
 
 You will also need to enable i2c bus via ```sudo raspi-cofig``` throught the terminal, accessible through ```ssh pi@octopi.local:22```
 
