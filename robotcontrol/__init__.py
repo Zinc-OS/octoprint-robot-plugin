@@ -78,7 +78,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
 			angle = int(line.split(":")[1])
-			servo = int(line.split("o")[1].split(":")[0])
+			servo = int(line[5])
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
 				self._logger.info("gcode should move the robot")
