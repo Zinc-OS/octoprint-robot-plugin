@@ -100,8 +100,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 					self._logger.error("%s", e)
 			return None
 			#time.sleep(1)
-			
-		return line
+		else:
+			return line
             			
 	@octoprint.plugin.BlueprintPlugin.route("/servo1", methods=["GET"])
 	@restricted_access
