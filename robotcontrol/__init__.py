@@ -72,9 +72,9 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			#	return flask.make_response("error", 200)
 				
 	def gcode_set_angle(self, comm, line, *args, **kwargs):
-		#self._logger.info("gcode detected")
+		self._logger.info("gcode detected")
 		if line.startswith("servo"):
-			#self._logger.info("gcode recieved")
+			self._logger.info("gcode recieved")
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
 			angle = int(line.split(":")[1])
@@ -95,7 +95,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 					self._logger.error("%s", "SERVO DOES NOT EXIST")
 				try:
 					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
-					#self._logger.info("gcode moved the robot")
+					self._logger.info("gcode moved the robot")
 				except:
 					e = sys.exc_info()[0]
 					self._logger.error("%s", e)
