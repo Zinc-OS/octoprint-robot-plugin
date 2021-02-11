@@ -73,12 +73,12 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 				
 	def gcode_set_angle(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
 		self._logger.info("gcode detected")
-		if gcode and gcode.startswith('servo'):
+		if cmd and cmd.startswith('servo'):
 			self._logger.info("gcode recieved")
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
-			angle = int(gcode.split(":")[1])
-			servo = int(gcode[5])
+			angle = int(cmd.split(":")[1])
+			servo = int(cmd[5])
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
 				self._logger.info("gcode should move the robot")
@@ -98,10 +98,11 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 				except:
 					e = sys.exc_info()[0]
 					self._logger.error("%s", e)
+				
 			#return None
 			#time.sleep(1)
-		
-		return gcode
+			
+		return cmd
             			
 	@octoprint.plugin.BlueprintPlugin.route("/servo1", methods=["GET"])
 	@restricted_access
