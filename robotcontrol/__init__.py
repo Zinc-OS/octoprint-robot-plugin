@@ -266,5 +266,5 @@ def __plugin_load__():
 	global __plugin_hooks__
 	__plugin_hooks__ = {
 		"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
-		"octoprint.comm.protocol.gcode.queueing": __plugin_implementation__.gcode_set_angle
+		"octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.gcode_set_angle
 	}
