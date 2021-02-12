@@ -92,7 +92,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 					e = sys.exc_info()[0]
 					self._logger.error("%s", e)
 				
-			return None			
+			return None,			
 		return cmd
             			
 	@octoprint.plugin.BlueprintPlugin.route("/servo1", methods=["GET"])
