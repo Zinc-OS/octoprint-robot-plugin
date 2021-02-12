@@ -38,7 +38,6 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 	##~~ StartupPlugin mixin
 	def on_after_startup(self):
 		self._logger.info("Robot Control Plugin started")
-		self._settings.save()
 		self.getAddresses()
 		self.time=time.time()
 		
