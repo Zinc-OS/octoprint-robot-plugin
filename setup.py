@@ -14,11 +14,11 @@ plugin_package = "robotcontrol"
 plugin_name = "robotcontrol"
 
 # The plugin's version. Can be overwritten within OctoPrint's internal data via __plugin_version__ in the plugin module
-plugin_version = "0.0.1"
+plugin_version = "0.0.2"
 
 # The plugin's description. Can be overwritten within OctoPrint's internal data via __plugin_description__ in the plugin
 # module
-plugin_description = """Allows a print to be restarted after it has been completed. Use with a Gcode at the end to sweep the old print off the bed in preparation for the new."""
+plugin_description = """Allows for control of a robot, or other servo-related matter."""
 
 # The plugin's author. Can be overwritten within OctoPrint's internal data via __plugin_author__ in the plugin module
 plugin_author = "Louis Sarwal"

@@ -57,7 +57,6 @@ $(function() {
                         url: "plugin/robotcontrol/servo"+ servo +"?angle="+angle*6,
                         type: "GET",
                         dataType: "text",
-                        headers: {"X-Api-Key":UI_API_KEY},
                         success: function(c) {
                              $("#success").text(c);
                         },

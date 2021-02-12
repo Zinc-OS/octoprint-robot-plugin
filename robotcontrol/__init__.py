@@ -1,5 +1,6 @@
 # coding=utf-8
 from __future__ import absolute_import
+from octoprint.access.permissions import Permissions, ADMIN_GROUP
 import octoprint.plugin
 import flask, json
 from octoprint.server.util.flask import restricted_access
@@ -62,14 +63,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 		
 
 
-#
-			#try:
-			##	self.setAngle1(servo,address)
-			#except OSError:
-			#	e = sys.exc_info()[0]
-			#	self._logger.error("%s", e)
-			#	return flask.make_response("error", 200)
-				
+
 	def gcode_set_angle(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
 		#self._logger.info("gcode detected")
 		if cmd and cmd.startswith('servo'):
@@ -98,14 +92,14 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 					e = sys.exc_info()[0]
 					self._logger.error("%s", e)
 				
-			return None
-			#time.sleep(1)
-			
+			return None			
 		return cmd
             			
 	@octoprint.plugin.BlueprintPlugin.route("/servo1", methods=["GET"])
 	@restricted_access
 	def setAngle1(self):
+		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
+			return flask.make_response("403 Failure. Check that you are an admin", 403)
 		if time.time()-self.time>0.1:#Make sure time between i2c attempts is not too small TODO: set as setting
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
@@ -126,6 +120,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 	@octoprint.plugin.BlueprintPlugin.route("/servo2", methods=["GET"])
 	@restricted_access			
 	def setAngle2(self):
+		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
+			return flask.make_response("403 Failure. Check that you are an admin", 403)
 		if time.time()-self.time>0.1:#Make sure time between i2c attempts is not too small TODO: set as setting
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
@@ -146,6 +142,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 	@octoprint.plugin.BlueprintPlugin.route("/servo3", methods=["GET"])
 	@restricted_access
 	def setAngle3(self):
+		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
+			return flask.make_response("403 Failure. Check that you are an admin", 403)
 		if time.time()-self.time>0.1:#Make sure time between i2c attempts is not too small TODO: set as setting
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
@@ -167,6 +165,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 	@octoprint.plugin.BlueprintPlugin.route("/servo4", methods=["GET"])
 	@restricted_access		
 	def setAngle4(self):
+		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
+			return flask.make_response("403 Failure. Check that you are an admin", 403)
 		if time.time()-self.time>0.1:#Make sure time between i2c attempts is not too small TODO: set as setting
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
@@ -190,6 +190,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 	@octoprint.plugin.BlueprintPlugin.route("/up4", methods=["GET"])
 	@restricted_access
 	def setAddress(self):
+		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
+			return flask.make_response("You are forbidden from executing this command...", 403)
 		address = int(flask.request.args.get("address", 0))
 		addresses = json.loads(self._settings.get(["available"]))
 		if address in addresses:
@@ -225,6 +227,17 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 		return dict(
 			js=["js/robotcontrol.js"]
 		)
+	
+	##~~ Access Permissions Hook
+	def get_permissions(self, *args, **kwargs):
+		return [
+			dict(key="ADMIN",
+				 name="Admin",
+				 description="Access to control of robot",
+				 roles=["admin"],
+				 dangerous=True,
+				 default_groups=[ADMIN_GROUP])
+		]
 	##~~ Softwareupdate hook
 	def get_update_information(self):
 		# Define the configuration for your plugin to use with the Software Update
@@ -266,5 +279,6 @@ def __plugin_load__():
 	global __plugin_hooks__
 	__plugin_hooks__ = {
 		"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
-		"octoprint.comm.protocol.gcode.sent": __plugin_implementation__.gcode_set_angle
+		"octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.gcode_set_angle,
+		"octoprint.access.permissions": __plugin_implementation__.get_permissions
 	}
