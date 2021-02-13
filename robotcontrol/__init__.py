@@ -69,7 +69,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			servo = int(cmd[5])
 			servo+=0b10000000
 			#angle is an integer from 0 to 180
-			if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
+			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
 				#self._logger.info("gcode should move the robot")
 				realAngle=angle/6
 				n=int(realAngle)
@@ -95,7 +95,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			servo= int(flask.request.args.get("servo", 0))
 			servo+=0b10000000
 			#angle is an integer from 0 to 180
-			if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
+			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
 				realAngle=angle/2
 				n=int(realAngle)
 				try:
@@ -151,14 +151,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 	##~~  TemplatePlugin
 	def get_template_vars(self):
 		return dict(
-			servo1Min=self._settings.get(["servo1Min"]),
-			servo2Min=self._settings.get(["servo2Min"]),
-			servo3Min=self._settings.get(["servo3Min"]),
-			servo4Min=self._settings.get(["servo4Min"]),
-			servo1Max=self._settings.get(["servo1Max"]),
-			servo2Max=self._settings.get(["servo2Max"]),
-			servo3Max=self._settings.get(["servo3Max"]),
-			servo4Max=self._settings.get(["servo4Max"]),
+			servoMin=self._settings.get(["servoMin"]),
+			servoMax=self._settings.get(["servoMax"]),
 			addr="3",
 			available="[]"
 			
