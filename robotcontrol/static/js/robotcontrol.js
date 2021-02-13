@@ -56,7 +56,7 @@ $(function() {
                 }
                 
         self.add_gcode = function(servo, angle) {		
-            var row = $('<div>servo'+servo+':'+angle+'</div>');
+            var row = $('<div>servo'+(parseInt(servo)-1)+':'+angle+'</div>');
             $('#gcode-gen').append(row);
                         
         }
