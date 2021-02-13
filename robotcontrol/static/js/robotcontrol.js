@@ -1,3 +1,4 @@
+
 /*
  * View model for robotcontrol
  *
@@ -27,85 +28,34 @@ $(function() {
        self.load = function() {
            
             $('#boxes').html("");
-            $.ajax({
-                        url: "plugin/robotcontrol/servos",
-                        type: "GET",
-                        dataType: "text",
-                        success: function(c) {
-                             $("#success").text(c);
-                                self.numServos=parseInt(c);
-                                $('#boxes').html("");
-                                for(var i = 1; i <=parseInt(c); i++) {
-                                    var row;
-                                    row = $('<div class="control-group" id="row'+i+'"<label class="control-label">Servo '+i+'</label> <div class="controls"><input data-number = "'+(i-1)+'" type="range" class="texto input-block-level" value="45" min="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMin())/2 +'" max="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMax())/2 +'"></div></div>');
-                                    row.find(".texto").on("input",function() {
-                                            var arm= parseInt(this.value);
-                                            self.servo($(this).data("number"),arm);                              
-                                    });
-                                    row.find(".texto").mouseup(function() {
-                                            var arm= parseInt(this.value);
-                                            self.add_gcode($(this).data("number"),arm*2);                              
-                                    });
-                                    $('#boxes').append(row);
-                                }
-                            },
-                        error: function() {
-
+						$('#boxes').html("");
+						for(var i = 1; i <=4; i++) {
+							var row;
+                            row = $('<div class="control-group" <label class="control-label">Servo '+i+'</label> <div class="controls"><input data-number = "'+i+'" type="range" class="texto input-block-level" value="15" min="1" max="29"></div></div>');
+                            row.find(".texto").on("input",function() {
+                                    var arm= parseInt(this.value);
+                                    self.servo($(this).data("number"),arm);                              
+                            });
+                            row.find(".texto").mouseup(function() {
+                                    var arm= parseInt(this.value);
+                                    self.add_gcode($(this).data("number"),arm*6);                              
+                            });
+                            
+                           
+                             $('#boxes').append(row);
                         }
-            });
                 }
                 
         self.add_gcode = function(servo, angle) {		
-            var row = $('<div>servo'+(parseInt(servo)-1)+':'+angle+'</div>');
+            var row = $('<div>servo'+servo+':'+angle+'</div>');
             $('#gcode-gen').append(row);
                         
-        }
-        self.addServo = function(){
-            self.numServos+=1;
-            var row = $('<div class="control-group" id="row'+self.numServos+'" <label class="control-label">Servo '+self.numServos+'</label> <div class="controls"><input data-number = "'+(self.numServos-1)+'" type="range" class="texto input-block-level" value="30" min="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMin())/3 +'" max="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMax())/3 +'"></div></div>');
-            row.find(".texto").on("input",function() {
-                    var arm= parseInt(this.value);
-                    self.servo($(this).data("number"),arm);                              
-            });
-            row.find(".texto").mouseup(function() {
-                    var arm= parseInt(this.value);
-                    self.add_gcode($(this).data("number"),arm*2);                              
-            });
-            $('#boxes').append(row);
-            $.ajax({
-                        url: "plugin/robotcontrol/removeServo",
-                        type: "GET",
-                        dataType: "text",
-                        success: function(c) {
-                            $("#success").text(c);
-                        },
-                        error: function() {
-                            $("#success").text("ERROR ADDING SERVO!!!");
-                        }
-            });
-        }
-        
-        self.removeServo = function(){
-            
-            $("#row"+self.numServos).remove();
-            self.numServos-=1;
-            $.ajax({
-                        url: "plugin/robotcontrol/removeServo",
-                        type: "GET",
-                        dataType: "text",
-                        success: function(c) {
-                            $("#success").text(c);
-                        },
-                        error: function() {
-                            $("#success").text("ERROR REMOVING SERVO!!!");
-                        }
-            });
         }
                 
         self.servo=function(servo,angle){
             //if (self.getTime()-self.time>200){
                 $.ajax({
-                        url: "plugin/robotcontrol/servo?angle="+angle*3+"&servo="+servo,
+                        url: "plugin/robotcontrol/servo"+ servo +"?angle="+angle*6,
                         type: "GET",
                         dataType: "text",
                         success: function(c) {
@@ -129,7 +79,7 @@ $(function() {
             
         }
     }
-    
+		
 
 	// This is how our plugin registers itself with the application, by adding some configuration
 	// information to the global variable OCTOPRINT_VIEWMODELS
