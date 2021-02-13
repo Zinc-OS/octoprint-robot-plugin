@@ -95,21 +95,22 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			return None,			
 		return cmd
             			
-	@octoprint.plugin.BlueprintPlugin.route("/servo1", methods=["GET"])
+	@octoprint.plugin.BlueprintPlugin.route("/servo", methods=["GET"])
 	@restricted_access
-	def setAngle1(self):
+	def setAngleApi(self):
 		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
 			return flask.make_response("403 Failure. Check that you are an admin", 403)
 		if time.time()-self.time>0.1:#Make sure time between i2c attempts is not too small TODO: set as setting
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
 			angle = int(flask.request.args.get("angle", 0))
+			servo= int(flask.request.args.get("servo", 0))
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
-				realAngle=angle/6
+				realAngle=angle/2
 				n=int(realAngle)
 				try:
-					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
+					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servo,n]))
 				except:
 					e = sys.exc_info()[0]
 					self._logger.error("%s", e)
@@ -117,75 +118,6 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 				#time.sleep(1)
 				return flask.make_response("success", 200)
 		return flask.make_response("Too Fast!", 200)
-	@octoprint.plugin.BlueprintPlugin.route("/servo2", methods=["GET"])
-	@restricted_access			
-	def setAngle2(self):
-		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
-			return flask.make_response("403 Failure. Check that you are an admin", 403)
-		if time.time()-self.time>0.1:#Make sure time between i2c attempts is not too small TODO: set as setting
-			self.time=time.time()
-			addr = int(self._settings.get(["addr"]))
-			angle = int(flask.request.args.get("angle", 0))
-			if angle<int(self._settings.get(["servo2Max"])) and angle>int(self._settings.get(["servo2Min"])):
-				#angle is an integer from 0 to 180
-				realAngle=angle/6
-				n=32+int(realAngle)
-				try:
-					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
-				except:
-					e = sys.exc_info()[0]
-					self._logger.error("%s", e)
-					return flask.make_response("error", 200)
-				#time.sleep(1)
-				return flask.make_response("success", 200)
-		return flask.make_response("Too Fast!", 200)
-	@octoprint.plugin.BlueprintPlugin.route("/servo3", methods=["GET"])
-	@restricted_access
-	def setAngle3(self):
-		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
-			return flask.make_response("403 Failure. Check that you are an admin", 403)
-		if time.time()-self.time>0.1:#Make sure time between i2c attempts is not too small TODO: set as setting
-			self.time=time.time()
-			addr = int(self._settings.get(["addr"]))
-			angle = int(flask.request.args.get("angle", 0))
-			if angle<int(self._settings.get(["servo3Max"])) and angle>int(self._settings.get(["servo3Min"])):
-				
-				#angle is an integer from 0 to 180
-				realAngle=angle/6
-				n=64+int(realAngle)
-				try:
-					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
-				except:
-					e = sys.exc_info()[0]
-					self._logger.error("%s", e)
-					return flask.make_response("error", 200)
-				#time.sleep(1)
-				return flask.make_response("success", 200)
-		return flask.make_response("Too Fast!", 200)
-	@octoprint.plugin.BlueprintPlugin.route("/servo4", methods=["GET"])
-	@restricted_access		
-	def setAngle4(self):
-		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
-			return flask.make_response("403 Failure. Check that you are an admin", 403)
-		if time.time()-self.time>0.1:#Make sure time between i2c attempts is not too small TODO: set as setting
-			self.time=time.time()
-			addr = int(self._settings.get(["addr"]))
-			angle = int(flask.request.args.get("angle", 0))
-			if angle<int(self._settings.get(["servo4Max"])) and angle>int(self._settings.get(["servo4Min"])):
-				
-				#angle is an integer from 0 to 180
-				realAngle=angle/6
-				n=96+int(realAngle)
-				try:
-					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
-				except:
-					e = sys.exc_info()[0]
-					self._logger.error("%s", e)
-					return flask.make_response("error", 200)
-				#time.sleep(1)
-				return flask.make_response("success", 200)
-		return flask.make_response("Too Fast!", 200)
-			
 	
 	@octoprint.plugin.BlueprintPlugin.route("/up4", methods=["GET"])
 	@restricted_access
