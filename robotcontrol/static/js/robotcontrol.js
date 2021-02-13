@@ -52,6 +52,7 @@ $(function() {
                         error: function() {
 
                         }
+            });
                 }
                 
         self.add_gcode = function(servo, angle) {		
@@ -61,7 +62,7 @@ $(function() {
         }
         self. addServo = function(){
             $.ajax({
-                        url: "plugin/robotcontrol/addServo,
+                        url: "plugin/robotcontrol/addServo",
                         type: "GET",
                         dataType: "text",
                         success: function(c) {
@@ -81,6 +82,7 @@ $(function() {
                         error: function() {
                             $("#success").text("ERROR ADDING SERVO!!!");
                         }
+            });
         }
                 
         self.servo=function(servo,angle){
@@ -110,7 +112,7 @@ $(function() {
             
         }
     }
-		
+    
 
 	// This is how our plugin registers itself with the application, by adding some configuration
 	// information to the global variable OCTOPRINT_VIEWMODELS
