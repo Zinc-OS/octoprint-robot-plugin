@@ -67,11 +67,11 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			addr = int(self._settings.get(["addr"]))
 			angle = int(cmd.split(":")[1])
 			servonum = int(cmd[5])-1
-			servonum+=0b10000000
+			servonum+=0b1000000
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
 				#self._logger.info("gcode should move the robot")
-				realAngle=angle/6
+				realAngle=angle/3
 				n=int(realAngle)
 				try:
 					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servonum,n]))
@@ -93,10 +93,10 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			addr = int(self._settings.get(["addr"]))
 			angle = int(flask.request.args.get("angle", 0))
 			servonum= int(flask.request.args.get("servo", 0))
-			servonum+=0b10000000
+			servonum+=0b1000000
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
-				realAngle=angle/2
+				realAngle=angle/3
 				n=int(realAngle)
 				try:
 					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servonum,n]))
