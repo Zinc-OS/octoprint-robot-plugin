@@ -62,7 +62,7 @@ $(function() {
         }
         self.addServo = function(){
             self.numServos+=1;
-            var row = $('<div class="control-group" id="row'+self.numServos+'" <label class="control-label">Servo '+self.numServos+'</label> <div class="controls"><input data-number = "'+(self.numServos-1)+'" type="range" class="texto input-block-level" value="45" min="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMin())/2 +'" max="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMax())/2 +'"></div></div>');
+            var row = $('<div class="control-group" id="row'+self.numServos+'" <label class="control-label">Servo '+self.numServos+'</label> <div class="controls"><input data-number = "'+(self.numServos-1)+'" type="range" class="texto input-block-level" value="30" min="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMin())/3 +'" max="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMax())/3 +'"></div></div>');
             row.find(".texto").on("input",function() {
                     var arm= parseInt(this.value);
                     self.servo($(this).data("number"),arm);                              
@@ -105,7 +105,7 @@ $(function() {
         self.servo=function(servo,angle){
             //if (self.getTime()-self.time>200){
                 $.ajax({
-                        url: "plugin/robotcontrol/servo?angle="+angle*2+"&servo="+servo,
+                        url: "plugin/robotcontrol/servo?angle="+angle*3+"&servo="+servo,
                         type: "GET",
                         dataType: "text",
                         success: function(c) {
