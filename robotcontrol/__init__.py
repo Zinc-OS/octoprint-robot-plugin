@@ -22,14 +22,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 	##~~ SettingsPlugin mixin
 	def get_settings_defaults(self):
 		return dict(
-			servo1Min="0",
-			servo2Min="0",
-			servo3Min="0",
-			servo4Min="0",
-			servo1Max="180",
-			servo2Max="180",
-			servo3Max="180",
-			servo4Max="180",
+			servoMin="0",
+			servoMax="180",
 			addr="3",
 			available="[]"
 			
@@ -72,21 +66,14 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			addr = int(self._settings.get(["addr"]))
 			angle = int(cmd.split(":")[1])
 			servo = int(cmd[5])
+			servo+=0b10000000
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
 				#self._logger.info("gcode should move the robot")
 				realAngle=angle/6
 				n=int(realAngle)
-				if servo == 2:
-					n+=32
-				elif servo == 3:
-					n+=64
-				elif servo == 4:
-					n+=96
-				else:
-					self._logger.error("%s", "SERVO DOES NOT EXIST")
 				try:
-					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
+					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servo,n]))
 					#self._logger.info("gcode moved the robot")
 				except:
 					e = sys.exc_info()[0]
@@ -105,6 +92,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			addr = int(self._settings.get(["addr"]))
 			angle = int(flask.request.args.get("angle", 0))
 			servo= int(flask.request.args.get("servo", 0))
+			servo+=0b10000000
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servo1Max"])) and angle>int(self._settings.get(["servo1Min"])):
 				realAngle=angle/2
