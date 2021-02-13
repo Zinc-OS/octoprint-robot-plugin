@@ -66,7 +66,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
 			angle = int(cmd.split(":")[1])
-			servonum = int(cmd[5])
+			servonum = int(cmd[5])-1
 			servonum+=0b10000000
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
