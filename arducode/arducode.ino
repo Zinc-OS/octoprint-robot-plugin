@@ -23,10 +23,10 @@ void receiveEvent(int howMany) {
     current_servo=c-128;
   }else{
     if(servo[current_servo].attached()){
-      servo[current_servo].write(c*3);
+      servo[current_servo].write(c*2);
     }else if(current_servo<=servos){
       servo[current_servo].attach(servoPins[current_servo]);
-      servo[current_servo].write(c*3);
+      servo[current_servo].write(c*2);
     }
       
         
