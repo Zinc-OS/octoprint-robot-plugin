@@ -26,12 +26,11 @@ There are sliders in the robot control tab, and gcodes can be used with the form
 
 Arduino code:
 ```
-
 #include <Wire.h>
 #include <Servo.h>
 const int ledPin = 13; // onboard LED
 static_assert(LOW == 0, "Expecting LOW to be 0");
-int servos=4;//The number of servos used
+const int servos=4;//The number of servos used
 Servo servo[servos];
 //current servo do not change
 int current_servo=0;
@@ -62,6 +61,7 @@ void receiveEvent(int howMany) {
     }
   
 }
+
 
 ```
 Board setup:
