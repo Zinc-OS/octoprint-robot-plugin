@@ -37,7 +37,7 @@ $(function() {
                                 $('#boxes').html("");
                                 for(var i = 1; i <=parseInt(c); i++) {
                                     var row;
-                                    row = $('<div class="control-group" <label class="control-label">Servo '+i+'</label> <div class="controls"><input data-number = "'+(i-1)+'" type="range" class="texto input-block-level" value="15" min="'+ parseInt(self.settings.plugins.robotcontrol.servoMin)/2 +'" max="'+ parseInt(self.settings.plugins.robotcontrol.servoMax)/2 +'"></div></div>');
+                                    row = $('<div class="control-group" <label class="control-label">Servo '+i+'</label> <div class="controls"><input data-number = "'+(i-1)+'" type="range" class="texto input-block-level" value="15" min="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMin)/2 +'" max="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMax)/2 +'"></div></div>');
                                     row.find(".texto").on("input",function() {
                                             var arm= parseInt(this.value);
                                             self.servo($(this).data("number"),arm);                              
@@ -67,7 +67,7 @@ $(function() {
                         dataType: "text",
                         success: function(c) {
                             self.numServos+=1;
-                            var row = $('<div class="control-group" <label class="control-label">Servo '+self.numServos+'</label> <div class="controls"><input data-number = "'+self.numServos+'" type="range" class="texto input-block-level" value="15" min="'+ parseInt(self.settings.plugins.robotcontrol.servoMin)/2 +'" max="'+ parseInt(self.settings.plugins.robotcontrol.servoMax)/2 +'"></div></div>');
+                            var row = $('<div class="control-group" <label class="control-label">Servo '+self.numServos+'</label> <div class="controls"><input data-number = "'+self.numServos+'" type="range" class="texto input-block-level" value="15" min="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMin)/2 +'" max="'+ parseInt(self.settings.settings.plugins.robotcontrol.servoMax)/2 +'"></div></div>');
                             row.find(".texto").on("input",function() {
                                     var arm= parseInt(this.value);
                                     self.servo($(this).data("number"),arm);                              
