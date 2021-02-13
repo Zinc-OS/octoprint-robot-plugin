@@ -128,6 +128,16 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 		self._settings.set(["servos"],str(servos))
 		self._settings.save()
 		return flask.make_response("success", 200)
+	@octoprint.plugin.BlueprintPlugin.route("/removeServo", methods=["GET"])
+	@restricted_access
+	def removeServo(self):
+		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
+			return flask.make_response("You are forbidden from executing this command...", 403)
+		servos=int(self._settings.get(["servos"]))
+		servos-=1
+		self._settings.set(["servos"],str(servos))
+		self._settings.save()
+		return flask.make_response("success", 200)
 	@octoprint.plugin.BlueprintPlugin.route("/servos", methods=["GET"])
 	@restricted_access
 	def getServos(self):
