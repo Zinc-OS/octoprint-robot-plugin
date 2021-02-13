@@ -66,15 +66,15 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
 			angle = int(cmd.split(":")[1])
-			servo = int(cmd[5])
-			servo+=0b10000000
+			servonum = int(cmd[5])
+			servonum+=0b10000000
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
 				#self._logger.info("gcode should move the robot")
 				realAngle=angle/6
 				n=int(realAngle)
 				try:
-					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servo,n]))
+					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servonum,n]))
 					#self._logger.info("gcode moved the robot")
 				except:
 					e = sys.exc_info()[0]
@@ -92,14 +92,14 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			self.time=time.time()
 			addr = int(self._settings.get(["addr"]))
 			angle = int(flask.request.args.get("angle", 0))
-			servo= int(flask.request.args.get("servo", 0))
-			servo+=0b10000000
+			servonum= int(flask.request.args.get("servo", 0))
+			servonum+=0b10000000
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
 				realAngle=angle/2
 				n=int(realAngle)
 				try:
-					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servo,n]))
+					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servonum,n]))
 				except:
 					e = sys.exc_info()[0]
 					self._logger.error("%s", e)
@@ -124,7 +124,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
 			return flask.make_response("You are forbidden from executing this command...", 403)
 		servos=int(self._settings.get(["servos"]))
-		servos+=1
+		if servos<127:
+			servos+=1
 		self._settings.set(["servos"],str(servos))
 		self._settings.save()
 		return flask.make_response("success", 200)
@@ -134,7 +135,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 		if not Permissions.PLUGIN_ROBOTCONTROL_ADMIN.can():
 			return flask.make_response("You are forbidden from executing this command...", 403)
 		servos=int(self._settings.get(["servos"]))
-		servos-=1
+		if servos>1:
+			servos-=1
 		self._settings.set(["servos"],str(servos))
 		self._settings.save()
 		return flask.make_response("success", 200)
