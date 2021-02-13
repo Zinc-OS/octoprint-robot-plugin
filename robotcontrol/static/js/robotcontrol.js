@@ -60,7 +60,7 @@ $(function() {
             $('#gcode-gen').append(row);
                         
         }
-        self. addServo = function(){
+        self.addServo = function(){
             $.ajax({
                         url: "plugin/robotcontrol/addServo",
                         type: "GET",
