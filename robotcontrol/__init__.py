@@ -68,7 +68,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			addr = int(self._settings.get(["addr"]))
 			angle = int(cmd.split(":")[1])
 			servonum = int(cmd[5])-1
-			writeServo(servonum,addr)
+			self.writeServo(servonum,addr)
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
 				#self._logger.info("gcode should move the robot")
@@ -98,7 +98,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			addr = int(self._settings.get(["addr"]))
 			angle = int(flask.request.args.get("angle", 0))
 			servonum= int(flask.request.args.get("servo", 0))
-			writeServo(servonum,addr)
+			self.writeServo(servonum,addr)
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
 				realAngle=angle/2
