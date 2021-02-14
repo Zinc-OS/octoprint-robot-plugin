@@ -126,7 +126,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 		servos=int(self._settings.get(["servos"]))
 		if servos<127:
 			servos+=1
-		self._settings.set(str(servos),str(servos))
+		self._settings.set(["servos"],str(servos))
 		self._settings.save()
 		return flask.make_response("success", 200)
 	@octoprint.plugin.BlueprintPlugin.route("/removeServo", methods=["GET"])
@@ -137,7 +137,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 		servos=int(self._settings.get(["servos"]))
 		if servos>1:
 			servos-=1
-		self._settings.set(str(servos)str(servos))
+		self._settings.set(["servos"],str(servos))
 		self._settings.save()
 		return flask.make_response("success", 200)
 	@octoprint.plugin.BlueprintPlugin.route("/servos", methods=["GET"])
