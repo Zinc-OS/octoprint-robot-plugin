@@ -30,12 +30,13 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			
 			
 		)
-
+	
 	##~~ StartupPlugin mixin
 	def on_after_startup(self):
 		self._logger.info("Robot Control Plugin started")
 		self.getAddresses()
 		self.time=time.time()
+		self.current_servo=None
 		
 	def getAddresses(self):
 		availableArray=[]
@@ -67,14 +68,14 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			addr = int(self._settings.get(["addr"]))
 			angle = int(cmd.split(":")[1])
 			servonum = int(cmd[5])-1
-			servonum+=0b10000000
+			writeServo(servonum,addr)
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
 				#self._logger.info("gcode should move the robot")
 				realAngle=angle/6
 				n=int(realAngle)
 				try:
-					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servonum,n]))
+					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
 					#self._logger.info("gcode moved the robot")
 				except:
 					e = sys.exc_info()[0]
@@ -82,6 +83,10 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 				
 			return None,			
 		return cmd
+	
+		
+		
+	
             			
 	@octoprint.plugin.BlueprintPlugin.route("/servo", methods=["GET"])
 	@restricted_access
@@ -93,13 +98,13 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			addr = int(self._settings.get(["addr"]))
 			angle = int(flask.request.args.get("angle", 0))
 			servonum= int(flask.request.args.get("servo", 0))
-			servonum+=0b10000000
+			writeServo(servonum,addr)
 			#angle is an integer from 0 to 180
 			if angle<int(self._settings.get(["servoMax"])) and angle>int(self._settings.get(["servoMin"])):
 				realAngle=angle/2
 				n=int(realAngle)
 				try:
-					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servonum,n]))
+					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
 					return flask.make_response("success", 200)
 				except:
 					e = sys.exc_info()[0]
@@ -109,6 +114,18 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			return flask.make_response("ERROR", 200)
 		return flask.make_response("Too Fast!", 200)
 	
+	
+	def writeServo(self,servo,addr):
+		servos=self._settings.get(["servos"])
+		if  servo!=self.current_servo and not servo>servos:
+			self.current_servo=servo
+			servo+=0b10000000
+			try:
+				smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servo]))
+			except:
+				e = sys.exc_info()[0]
+				self._logger.error("%s", e)
+			
 	@octoprint.plugin.BlueprintPlugin.route("/up4", methods=["GET"])
 	@restricted_access
 	def setAddress(self):
