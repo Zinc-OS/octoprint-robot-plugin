@@ -116,7 +116,7 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 	
 	
 	def writeServo(self,servo,addr):
-		servos=self._settings.get(["servos"])
+		servos=int(self._settings.get(["servos"]))
 		if  servo!=self.current_servo and not servo>servos:
 			self.current_servo=servo
 			servo+=0b10000000
