@@ -100,12 +100,13 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 				n=int(realAngle)
 				try:
 					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [servonum,n]))
+					return flask.make_response("success", 200)
 				except:
 					e = sys.exc_info()[0]
 					self._logger.error("%s", e)
 					return flask.make_response("error", 200)
 				#time.sleep(1)
-				return flask.make_response("success", 200)
+			return flask.make_response("ERROR", 200)
 		return flask.make_response("Too Fast!", 200)
 	
 	@octoprint.plugin.BlueprintPlugin.route("/up4", methods=["GET"])
