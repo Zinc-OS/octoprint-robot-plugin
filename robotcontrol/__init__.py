@@ -41,6 +41,8 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 		self._logger.info("Robot Control Plugin started")
 		self.getAddresses()
 		self.time=time.time()
+		self.arg=None
+		self.commandarray=[]
 		
 	def getAddresses(self):
 		availableArray=[]
@@ -85,15 +87,21 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 					n+=96
 				else:
 					self._logger.error("%s", "SERVO DOES NOT EXIST")
-				try:
-					smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, [n]))
-					#self._logger.info("gcode moved the robot")
-				except:
-					e = sys.exc_info()[0]
-					self._logger.error("%s", e)
+				self.commandarray.append(n)
 				
-			return None,			
+				
+			return None,
+		self.arg=cmd
 		return cmd
+	def start_gcode_commands(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
+		if cmd and cmd=self.arg:
+			try:
+				smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, self.commandarray))
+			except:
+				e = sys.exc_info()[0]
+				self._logger.error("%s", e)
+			self.commandarray=[]
+			
             			
 	@octoprint.plugin.BlueprintPlugin.route("/servo1", methods=["GET"])
 	@restricted_access
