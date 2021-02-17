@@ -73,17 +73,21 @@ void receiveEvent(int howMany) {
     if(c>64){
       if(c>96){
         myservoa.write((c-96)*6);
+        delay(100);
       }
       else{
         myservob.write((c-64)*6);
+        delay(100);
       }
     }
     else{
       myservoc.write((c-32)*6);
+      delay(100);
     }
   }
   else{
     myservod.write(c*6);
+    delay(100);
   }
 }
 ```
