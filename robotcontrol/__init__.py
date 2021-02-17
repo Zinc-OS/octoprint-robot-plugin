@@ -93,8 +93,9 @@ class RobotControlPlugin(octoprint.plugin.SettingsPlugin,
 			return None,
 		self.arg=cmd
 		return cmd
+	
 	def start_gcode_commands(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
-		if cmd and cmd=self.arg:
+		if cmd and cmd==self.arg and self.commandarray!=[]:
 			try:
 				smbus2.SMBus(1).i2c_rdwr(smbus2.i2c_msg.write(addr, self.commandarray))
 			except:
@@ -288,5 +289,6 @@ def __plugin_load__():
 	__plugin_hooks__ = {
 		"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
 		"octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.gcode_set_angle,
+		"octoprint.comm.protocol.gcode.sent": __plugin_implementation__.start_gcode_commands,
 		"octoprint.access.permissions": __plugin_implementation__.get_permissions
 	}
